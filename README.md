@@ -21,7 +21,7 @@ There are various verbs that coju has that connect has. They are all **lowercase
 * options
 * trace
 
-Some of the above you'll never use or need, they are for full bodied rest api's, if you register a `coju.post()` listener and request that resource with another verb the response will be a `501 Not Implemented` header or a `505 Not Supported` header.
+Some of the above you'll never use or need, they are for full bodied rest api's, if you register a `coju.post()` listener and request that resource with another verb the response will simply not be fulfilled and time-out.
 
 ---
 
