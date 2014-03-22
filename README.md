@@ -31,8 +31,8 @@ Some of the above you'll never use or need, they are for full bodied rest api's,
 	      router = require('coju-router')(coju),
     	  routes = require('routes');
     		
-    	coju.get('/', routes.index);
-    	coju.post('/login', routes.login);
+    	router.get('/', routes.index);
+    	router.post('/login', routes.login);
     	
 	    coju.listen(1811);
     }
@@ -50,16 +50,16 @@ If you want to set up a route to respond to varying http verbs with one common m
 
 ---
 
-	{
-    let
-      coju   = require('coju'),
+    {
+      let
+        coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-    router.verbs(['post', 'put', 'get', 'delete'], '/', routes.myRestApiHandler);
+      router.verbs(['post', 'put', 'get', 'delete'], '/', routes.myRestApiHandler);
     	
-	  coju.listen(1811);
-  }
+      coju.listen(1811);
+    }
 
 ####`coju.all(string route, Function callback)`
 
@@ -75,15 +75,15 @@ Want something to respond to all registered types of http verb? Use this functio
 ---
 
 	{
-    let
+      let
     	coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-    router.all('/', routes.myRestApiHandler);
+      router.all('/', routes.myRestApiHandler);
     	
 	  coju.listen(1811);
-  }
+    }
 
 ####`coju.load(Object routes)`
 
@@ -100,15 +100,15 @@ This also allows for routing via an external provider as well as loading files f
 **index.js**
 
 	{
-    let
+      let
     	coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-    router.load(routes);
+      router.load(routes);
     	
 	  coju.listen(1811);
-  }
+    }
     
 **./routes/index.js**
 
