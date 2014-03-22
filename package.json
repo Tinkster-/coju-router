@@ -1,0 +1,18 @@
+{
+  "name": "coju-router",
+  "version": "0.0.2",
+  "description": "Event based router for coju module",
+  "main": "index.js",
+  "scripts": {
+    "test" : "node --harmony --use_strict tests/all.js"
+  },
+  "keywords": [
+    "Http",
+    "wrapper"
+  ],
+  "dependencies" : {
+    "coju" : "*"
+  },
+  "author": "Dave Mackintosh",
+  "license": "MIT"
+}

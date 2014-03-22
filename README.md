@@ -9,7 +9,7 @@ The API provides access to the most common verbs in the HTTP _'language'_.
 **type** *Function*  
 **access** *Public*  
 **return** *Void*  
-**stability** *6: Stable*
+**stability** *1: Stable*
 
 There are various verbs that coju has that connect has. They are all **lowercase**, here's the list:
 
@@ -42,7 +42,7 @@ Some of the above you'll never use or need, they are for full bodied rest api's,
 **type** *Function*  
 **access** *Public*  
 **return** *Void*  
-**stability** *6: Stable*
+**stability** *1: Stable*
 
 If you want to set up a route to respond to varying http verbs with one common middleware you can use the `coju.verbs()` function and list all the verbs you want to subscribe to as an array instead of using the various `coju.{verb}` functions separately.
 
@@ -51,22 +51,22 @@ If you want to set up a route to respond to varying http verbs with one common m
 ---
 
 	{
-      let
-        coju   = require('coju'),
+    let
+      coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-      router.verbs(['post', 'put', 'get', 'delete'], '/', routes.myRestApiHandler);
+    router.verbs(['post', 'put', 'get', 'delete'], '/', routes.myRestApiHandler);
     	
 	  coju.listen(1811);
-    }
+  }
 
 ####`coju.all(string route, Function callback)`
 
 **type** *Function*  
 **access** *Public*  
 **return** *Void*  
-**stability** *6: Stable*
+**stability** *1: Stable*
 
 Want something to respond to all registered types of http verb? Use this function.
 
@@ -75,22 +75,22 @@ Want something to respond to all registered types of http verb? Use this functio
 ---
 
 	{
-      let
+    let
     	coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-      router.all('/', routes.myRestApiHandler);
+    router.all('/', routes.myRestApiHandler);
     	
 	  coju.listen(1811);
-    }
+  }
 
 ####`coju.load(Object routes)`
 
 **type** *Function*  
 **access** *Public*  
 **return** *Void*  
-**stability** *6: Development*
+**stability** *4: Development*
 
 Register a large object of routes for varying verbs, all verbs available in the router are available as options in your object.
 
@@ -100,15 +100,15 @@ This also allows for routing via an external provider as well as loading files f
 **index.js**
 
 	{
-      let
+    let
     	coju   = require('coju'),
 	    router = require('coju-router'),
     	routes = require('./routes');
     		
-      router.load(routes);
+    router.load(routes);
     	
 	  coju.listen(1811);
-    }
+  }
     
 **./routes/index.js**
 
