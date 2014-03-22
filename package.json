@@ -1,6 +1,6 @@
 {
   "name": "coju-router",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Event based router for coju module",
   "main": "index.js",
   "scripts": {},
@@ -8,9 +8,7 @@
     "Http",
     "wrapper"
   ],
-  "dependencies" : {
-    "coju" : "*"
-  },
+  "dependencies" : {},
   "author": "Dave Mackintosh",
   "license": "MIT"
 }
