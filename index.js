@@ -44,7 +44,7 @@
     }
 
     for (let r in this.routes[queue]) {
-      let re = new RegExp('^' + r + '$');
+      let re = new RegExp('^' + r.replace('*', '.*') + '$');
 
       if (re.test(this.cururl)) {
         this.routes[queue][r].forEach(function(ro) {
