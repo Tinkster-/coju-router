@@ -8,6 +8,10 @@
     "Http",
     "wrapper"
   ],
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/tinkster-/coju-router.git"
+  },
   "author": "Dave Mackintosh",
   "license": "MIT"
 }
