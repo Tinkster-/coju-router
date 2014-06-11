@@ -67,7 +67,21 @@ THE SOFTWARE.
     }
 
     for (let r in this.routes[queue]) {
-      let re = new RegExp('^' + r.replace('*', '.*') + '$');
+      // Check for url parameters
+      let parameterised = r.replace(/:(\w+)([\?\*])?/g, '(.*)');
+      let re = new RegExp('^' + parameterised.replace('*', '.*') + '$');
+      let params = r.match(/:(\w+)([\?\*])?/g);
+      let matches = req.url.match(parameterised);
+
+      if (matches && !data) {
+        data = {};
+      }
+
+      params.forEach(function(param, index) {
+        data[param.substr(1, param.length)] = matches[index + 1];
+      }.bind(this));
+
+      console.log(data, re.test(this.cururl), this.cururl);
 
       if (re.test(this.cururl)) {
         this.routes[queue][r].forEach(function(ro) {
