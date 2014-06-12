@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */
+*/
 {
 
   function coju_router(coju) {
@@ -61,7 +61,16 @@ THE SOFTWARE.
     }.bind(this));
   }
 
+  /**
+   * Run all the callbacks waiting in the queue
+   * @param  {String} queue      The queue to execute
+   * @param  {HttpRequest} req   The Node HttpRequest
+   * @param  {HttpResponse} res  The Node HttpResponse
+   * @param  {?Object} data      Any data from POST or parameterised url
+   * @return {void}
+   */
   coju_router.prototype.runHttpMethodQueue = function(queue, req, res, data) {
+    // Check we have a queue and exit early if we don't
     if (!this.routes.hasOwnProperty(queue)) {
       return null;
     }
@@ -69,99 +78,177 @@ THE SOFTWARE.
     for (let r in this.routes[queue]) {
       // Check for url parameters
       let parameterised = r.replace(/:(\w+)([\?\*])?/g, '(.*)');
-      let re = new RegExp('^' + parameterised.replace('*', '.*') + '$');
-      let params = r.match(/:(\w+)([\?\*])?/g);
-      let matches = req.url.match(parameterised);
+      let params        = r.match(/:(\w+)([\?\*])?/g);
+      let matches       = req.url.match(parameterised);
+      let route         = new RegExp('^' + parameterised.replace('*', '.*') + '$');
 
+      // If there are parameter matchesbut data
+      // hasn't been initialised, init data.
       if (matches && !data) {
         data = {};
       }
 
+      // Loop over the parameters and add to data
       params.forEach(function(param, index) {
         data[param.substr(1, param.length)] = matches[index + 1];
       }.bind(this));
 
-      console.log(data, re.test(this.cururl), this.cururl);
-
-      if (re.test(this.cururl)) {
-        this.routes[queue][r].forEach(function(ro) {
-          ro(req, res, data);
+      // Does the current route match?
+      if (route.test(this.cururl)) {
+        this.routes[queue][r].forEach(function(middleware) {
+          middleware(req, res, data);
         });
       }
     }
   };
 
+  /**
+   * If there was any post data, split it and turn it into
+   * an object, if it was JSON just parse it and return it.
+   * @param  {Object} headers The headers of the request
+   * @return {void}
+   */
   coju_router.prototype.splitAndObjectifyPostData = function(headers) {
     if (!this.data) {
       return null;
     }
 
+    // If we posted data then deal with that and quit
     if (headers['content-type'].search('application/json') > -1) {
       try {
         return JSON.parse(this.data);
       } catch(e) {
-        console.error('Could not parse the JSON request due to malformed data.');
+        console.error('Could not parse the JSON request due to malformed data.', this.data);
         return null;
       }
     }
 
+    // If it wasn't json continue with splitting
     let d = this.data;
     this.data = {};
     
+    // Get key value pairs
     d.split('&').forEach(function(kpa) {
+      // Split to keys and values
       let obj = kpa.split('=');
 
+      // Add back to the data
       this.data[obj[0]] = obj[1];
     }.bind(this));
   };
 
+  /**
+   * Register a new route
+   * @param  {String}   type     The http method
+   * @param  {String|Regex}   route    The pattern to match
+   * @param  {Function} callback The middleware
+   * @return {[type]}            [description]
+   */
   coju_router.prototype.route = function (type, route, callback) {
+    // Check if we support this method
     if (!this.routes.hasOwnProperty(type)) {
       throw new TypeError('There is currently no support for "' + type + '". List a bug on github..');
     }
 
+    // Check if there is any middleware for this route already
     if (!this.routes[type].hasOwnProperty(route)) {
       this.routes[type][route] = [];
     }
 
+    // Push the middleware to the queue
     this.routes[type][route].push(callback);
     return this;
   };
 
+  /**
+   * Register middleware for a GET request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.get = function (route, callback) {
     this.route('get', route, callback);
   };
 
+  /**
+   * Register middleware for a POST request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.post = function (route, callback) {
     this.route('post', route, callback);
   };
 
+  /**
+   * Register middleware for a PUT request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.put = function (route, callback) {
     this.route('put', route, callback);
   };
 
+  /**
+   * Register middleware for a HEAD request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.head = function (route, callback) {
     this.route('head', route, callback);
   };
 
+  /**
+   * Register middleware for a OPTIONS request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.options = function (route, callback) {
     this.route('options', route, callback);
   };
 
+  /**
+   * Register middleware for a TRACE request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.trace = function (route, callback) {
     this.route('trace', route, callback);
   };
 
+  /**
+   * Register middleware for a DELETE request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.delete = function (route, callback) {
     this.route('delete', route, callback);
   };
 
+  /**
+   * Register middleware for all types of request
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.all = function (route, callback) {
     for (let v in this.routes) {
       this.route(v, route, callback);
     }
   };
 
+  /**
+   * Register middleware for a series of request methods
+   * @param  {Array} verbs An array of the http methods to queue
+   * @param  {String}   route    The route pattern
+   * @param  {Function} callback The middleware
+   * @return {void}
+   */
   coju_router.prototype.verbs = function (verbs, route, callback) {
     verbs.forEach(function(verb) {
       this.route(verb, route, callback);
