@@ -89,9 +89,11 @@ THE SOFTWARE.
       }
 
       // Loop over the parameters and add to data
-      params.forEach(function(param, index) {
-        data[param.substr(1, param.length)] = matches[index + 1];
-      }.bind(this));
+      if (params) {
+        params.forEach(function(param, index) {
+          data[param.substr(1, param.length)] = matches[index + 1];
+        }.bind(this));
+      }
 
       // Does the current route match?
       if (route.test(this.cururl)) {
