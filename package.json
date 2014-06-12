@@ -1,12 +1,13 @@
 {
   "name": "coju-router",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Event based router for coju module",
   "main": "index.js",
   "scripts": {},
   "keywords": [
     "Http",
-    "wrapper"
+    "wrapper",
+    "router"
   ],
   "repository" : {
     "type" : "git",
