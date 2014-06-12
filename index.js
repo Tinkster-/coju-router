@@ -77,10 +77,10 @@ THE SOFTWARE.
 
     for (let r in this.routes[queue]) {
       // Check for url parameters
-      let parameterised = r.replace(/:(\w+)([\?\*])?/g, '(*)');
+      let parameterised = r.replace(/:(\w+)([\?\*])?/g, '(.*)');
       let params        = r.match(/:(\w+)([\?\*])?/g);
       let matches       = req.url.match(parameterised);
-      let route         = new RegExp('^' + parameterised.replace('*', '.*') + '$');
+      let route         = new RegExp('^' + parameterised.replace(/.!\*/g, '.*') + '$');
 
       // If there are parameter matchesbut data
       // hasn't been initialised, init data.

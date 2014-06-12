@@ -1,6 +1,6 @@
 {
   "name": "coju-router",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Event based router for coju module",
   "main": "index.js",
   "scripts": {},
