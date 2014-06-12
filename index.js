@@ -89,7 +89,7 @@ THE SOFTWARE.
       }
 
       // Loop over the parameters and add to data
-      if (params) {
+      if (matches && params) {
         params.forEach(function(param, index) {
           data[param.substr(1, param.length)] = matches[index + 1];
         }.bind(this));
