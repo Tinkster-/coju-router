@@ -42,7 +42,7 @@ THE SOFTWARE.
       this.data = undefined;
 
       // We test this later
-      this.cururl = req.url;
+      this.cururl = req.url.split('?')[0];
 
       // If any data was sent, capture it
       req.on('data', function(data) {
